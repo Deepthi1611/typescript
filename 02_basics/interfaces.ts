@@ -39,3 +39,5 @@ admin = {id:1, email:'deepthi@gmail.com', startTrail : () => {
     // role:"test" - not allowed
     role: "admin"
     }
+
+export {}

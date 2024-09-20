@@ -16,3 +16,18 @@ function isAdminAccount(account: User | Admin) {
     }
     return false
 } 
+
+
+type fish = {swim: () => void}
+type bird = {fly: () => void}
+
+function isFish(pet: fish | bird): pet is fish{
+    return (pet as fish).swim !== undefined
+}
+
+function getFood(pet: fish | bird) {
+    if(isFish(pet)) {
+        return 'fish food'
+    }
+    return 'bird food'
+}
