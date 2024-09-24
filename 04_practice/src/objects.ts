@@ -11,6 +11,7 @@ let exampleObj = {
 }
 
 // mention the properties and types of properties of an object
+// type aliases
 type Guitarist = {
     name: string,
     active: boolean,
@@ -32,3 +33,16 @@ enum Grade {
 }
 
 console.log(Grade.A) // gives 0
+
+type stringOrNumber = string | number
+type userId = stringOrNumber // this kind of assignment is not possible for interfaces
+
+// literal types
+let myName: 'Deepu'
+// userName accepts only the mentioned values
+let userName: 'Deepu' | 'Sai' | 'Srikar'
+
+userName = 'Deepu'
+// userName = 'sss' - error
+
+export {}

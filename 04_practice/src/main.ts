@@ -14,3 +14,5 @@ let myName = 'Deepthi'
 let album: string | number
 // regular expression type
 let re : RegExp = /\w+/g
+
+export {}
