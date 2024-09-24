@@ -1,4 +1,5 @@
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 let obj;
 obj = []; // An array is also a type of object
 console.log(typeof obj); // gives type as object
@@ -22,3 +23,8 @@ var Grade;
     Grade[Grade["C"] = 2] = "C";
 })(Grade || (Grade = {}));
 console.log(Grade.A); // gives 0
+// literal types
+let myName;
+// userName accepts only the mentioned values
+let userName;
+userName = 'Deepu';
