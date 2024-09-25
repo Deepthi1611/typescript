@@ -25,6 +25,7 @@ var Grade;
 console.log(Grade.A); // gives 0
 // literal types
 let myName;
+// myName = 'Srikar' - error
 // userName accepts only the mentioned values
 let userName;
 userName = 'Deepu';
