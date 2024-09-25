@@ -39,6 +39,7 @@ type userId = stringOrNumber // this kind of assignment is not possible for inte
 
 // literal types
 let myName: 'Deepu'
+// myName = 'Srikar' - error
 // userName accepts only the mentioned values
 let userName: 'Deepu' | 'Sai' | 'Srikar'
 
