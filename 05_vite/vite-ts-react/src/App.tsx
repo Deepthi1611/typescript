@@ -35,6 +35,7 @@ function App() {
   },[users])
 
   const addOne = useCallback((e: MouseEvent<HTMLButtonElement> | KeyboardEvent<HTMLButtonElement>): void => setCount(prev => prev+1), [])
+  // The useMemo hook in React is used to optimize performance by memoizing (caching) the result of an expensive computation, so that it only recalculates when its dependencies change. This avoids unnecessary re-computations during every render.
   const result = useMemo<number>(() => fib(myNum), [myNum])
   return (
     <>
@@ -44,10 +45,14 @@ function App() {
     {/* <Counter setCount={setCount}>Count is {count}</Counter> */}
     {/* <List items={["☕ Coffee", "🌮 Tacos", "💻 Code"]} render={(item: string) => <span className="bold">{item}</span>} /> 
     <List items={[1,2,3,4]} render={(item: number) => <span className="bold">{item}</span>} /> */}
-    <h1>{count}</h1>
+
+
+    {/* <h1>{count}</h1>
     <button onClick={addOne}>Add</button> 
     <h2>{result}</h2>
-    <input type="text" ref={inputRef}></input>
+    <input type="text" ref={inputRef}></input> */}
+
+    <Counter>{(num: number) => <>current count: {num}</> }</Counter>
     </>
   )
 }
