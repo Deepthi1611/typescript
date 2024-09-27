@@ -38,6 +38,7 @@ const reducer = (state:typeof initialState, action: ReducerAction): typeof initi
         case REDUCER_ACTION_TYPE.DECREMENT:
             return {...state, count: state.count-1}
         case REDUCER_ACTION_TYPE.NEW_INPUT:
+            // The ?? (nullish coalescing operator) ensures that if action.payload is null or undefined, it falls back to an empty string ('').
             return {...state, text: action.payload ?? ''}
         default: throw new Error('error!')
     }
