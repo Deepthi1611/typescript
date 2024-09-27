@@ -106,7 +106,7 @@ type Incomes = Record<Streams, number | string>
 const monthlyincomes: Incomes = {
     salary: 500,
     bonus: 200,
-    sideHustle: 250
+    sideHustle: 'sample'
     // ddd:33
 }
 
