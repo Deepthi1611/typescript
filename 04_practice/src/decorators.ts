@@ -77,3 +77,63 @@ class Greeter {
 
 const greet = new Greeter("Hello world!")
 console.log(greet.greet())
+
+// ACCESSOR DECORATORS
+function LogAccess(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    const originalGetter = descriptor.get;
+
+    descriptor.get = function () {
+        console.log(`Getting value of ${propertyKey}`);
+        return originalGetter && originalGetter.call(this);
+    };
+}
+
+class Person {
+    private _name: string;
+
+    constructor(name: string) {
+        this._name = name;
+    }
+
+    @LogAccess
+    get name(): string {
+        return this._name;
+    }
+
+    set name(newName: string) {
+        this._name = newName;
+    }
+}
+
+const person = new Person("John");
+console.log(person.name); // Logs: "Getting value of name", followed by "John"
+
+function ValidateAge(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    const originalSetter = descriptor.set;
+
+    descriptor.set = function (age: number) {
+        if (age < 0 || age > 120) {
+            throw new Error('Invalid age value');
+        }
+        if (originalSetter) {
+            originalSetter.call(this, age);
+        }
+    };
+}
+
+class User {
+    private _age: number = 0;
+
+    @ValidateAge
+    set age(age: number) {
+        this._age = age;
+    }
+
+    get age(): number {
+        return this._age;
+    }
+}
+
+const user = new User();
+user.age = 25;  // Works fine
+user.age = -5;  // Throws "Invalid age value"
