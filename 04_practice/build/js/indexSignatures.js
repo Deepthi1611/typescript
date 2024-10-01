@@ -51,7 +51,7 @@ logStudentKey(student, 'gpa');
 const monthlyincomes = {
     salary: 500,
     bonus: 200,
-    sideHustle: 250
+    sideHustle: 'sample'
     // ddd:33
 };
 for (const revenue in monthlyincomes) {
