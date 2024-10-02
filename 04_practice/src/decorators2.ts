@@ -61,3 +61,56 @@ class Person3 {
         console.log('creating person object')
     }
 }
+
+// PROPERTY DECORATORS
+// for instance properties, target receives prototype of the object that was created, for static properties target refers to constructor function
+function LogDecorator(target: any, propertyName: string | symbol) {
+    console.log('property decorator')
+    console.log(target, propertyName)
+}
+// property decorator is executed when property is defined inside a class
+
+// ACCESSOR DECORATOR
+function log2(target: any, propertyName:string, propertyDescriptor: PropertyDescriptor ) {
+    console.log('accessor decorator')
+    console.log(target, propertyName, propertyDescriptor)
+}
+
+// METHOD DECORATOR
+// target: any - The prototype of the class for instance methods, or the constructor function for static methods.
+// name: string - The name of the method being decorated (as a string).
+// descriptor: PropertyDescriptor - The property descriptor object for the method being decorated, which allows you to modify the behavior of the method.
+function log3(target: any, name: string, descriptor: PropertyDescriptor) {
+    console.log('method decorator')
+    console.log(target, name, descriptor)
+}
+
+// PARAMETER DECORATOR
+// name is the name of the method in which param is used
+// position is the position of the arg in the method
+function log4(target: any, name: string, position: number) {
+    console.log('paramter decorator')
+    console.log(target, name, position)
+}
+class Product{
+    @LogDecorator
+    title: string
+    private _price: number
+    constructor(title: string, price: number) {
+        this.title = title
+        this._price = price
+    }
+
+    @log2
+    set price(price: number) {
+        if(price > 0) {
+            throw new Error('price should be greater than 0')
+        }
+        this._price = price
+    }
+
+    @log3
+    getPriceWithTax(@log4 tax: number) {
+        return this.price * (1 + tax)
+    }
+}
