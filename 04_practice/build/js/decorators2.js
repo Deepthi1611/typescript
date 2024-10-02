@@ -5,6 +5,9 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+var __param = (this && this.__param) || function (paramIndex, decorator) {
+    return function (target, key) { decorator(target, key, paramIndex); }
+};
 // CLASS DECORATORS
 // decorator is a function 
 // decorator generally starts with capital character
@@ -68,3 +71,55 @@ let Person3 = class Person3 {
 Person3 = __decorate([
     withTemplate('<h1>My h1 Object</h1>', 'app')
 ], Person3);
+// PROPERTY DECORATORS
+// for instance properties, target receives prototype of the object that was created, for static properties target refers to constructor function
+function LogDecorator(target, propertyName) {
+    console.log('property decorator');
+    console.log(target, propertyName);
+}
+// property decorator is executed when property is defined inside a class
+// ACCESSOR DECORATOR
+function log2(target, propertyName, propertyDescriptor) {
+    console.log('accessor decorator');
+    console.log(target, propertyName, propertyDescriptor);
+}
+// METHOD DECORATOR
+// target: any - The prototype of the class for instance methods, or the constructor function for static methods.
+// name: string - The name of the method being decorated (as a string).
+// descriptor: PropertyDescriptor - The property descriptor object for the method being decorated, which allows you to modify the behavior of the method.
+function log3(target, name, descriptor) {
+    console.log('method decorator');
+    console.log(target, name, descriptor);
+}
+// PARAMETER DECORATOR
+// name is the name of the method in which param is used
+// position is the position of the arg in the method
+function log4(target, name, position) {
+    console.log('paramter decorator');
+    console.log(target, name, position);
+}
+class Product {
+    constructor(title, price) {
+        this.title = title;
+        this._price = price;
+    }
+    set price(price) {
+        if (price > 0) {
+            throw new Error('price should be greater than 0');
+        }
+        this._price = price;
+    }
+    getPriceWithTax(tax) {
+        return this.price * (1 + tax);
+    }
+}
+__decorate([
+    LogDecorator
+], Product.prototype, "title", void 0);
+__decorate([
+    log2
+], Product.prototype, "price", null);
+__decorate([
+    log3,
+    __param(0, log4)
+], Product.prototype, "getPriceWithTax", null);
