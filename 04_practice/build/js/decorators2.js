@@ -8,7 +8,7 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-// Object.defineProperty(exports, "__esModule", { value: true });
+Object.defineProperty(exports, "__esModule", { value: true });
 // CLASS DECORATORS
 // decorator is a function 
 // decorator generally starts with capital character
@@ -189,3 +189,69 @@ const button = document.querySelector('button');
 // when showMessage is called without binding, this.message becomes undefined because this is referring to the button element, not the Printer instance.
 // button?.addEventListener('click', print.showMessage.bind(print))
 button === null || button === void 0 ? void 0 : button.addEventListener('click', print.showMessage);
+const registeredValidators = {};
+function Required(target, name) {
+    var _a, _b;
+    registeredValidators[target.constructor.name] = Object.assign(Object.assign({}, registeredValidators[target.constructor.name]), { 
+        // appending required to the existing array
+        [name]: [...((_b = (_a = registeredValidators[target.constructor.name]) === null || _a === void 0 ? void 0 : _a[name]) !== null && _b !== void 0 ? _b : []), 'required'] });
+}
+function PositiveNumber(target, name) {
+    var _a, _b;
+    registeredValidators[target.constructor.name] = Object.assign(Object.assign({}, registeredValidators[target.constructor.name]), { 
+        // appending positive to the existing array
+        [name]: [...((_b = (_a = registeredValidators[target.constructor.name]) === null || _a === void 0 ? void 0 : _a[name]) !== null && _b !== void 0 ? _b : []), 'positive'] });
+}
+function validate(obj) {
+    // we need to validate all of the registered validators here
+    console.log(registeredValidators, 'registered validators');
+    const objValidatorConfig = registeredValidators[obj.constructor.name];
+    console.log(objValidatorConfig, 'object validator config');
+    if (!objValidatorConfig) {
+        return true;
+    }
+    let isValid = true;
+    for (const prop in objValidatorConfig) {
+        // prop is the key of each object
+        console.log(prop, 'prop');
+        for (const validator of objValidatorConfig[prop]) {
+            console.log(validator, 'validator');
+            switch (validator) {
+                case 'required':
+                    isValid = isValid && !!obj[prop];
+                    break;
+                case 'positive':
+                    isValid = isValid && obj[prop] > 0;
+                    break;
+            }
+        }
+    }
+    return isValid;
+}
+class Course {
+    constructor(title, price) {
+        this.title = title,
+            this.price = price;
+    }
+}
+__decorate([
+    Required
+], Course.prototype, "title", void 0);
+__decorate([
+    PositiveNumber
+], Course.prototype, "price", void 0);
+const courseForm = document.querySelector('form');
+courseForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const titleEle = document.getElementById('title');
+    const priceEle = document.getElementById('price');
+    const title = titleEle.value;
+    // + is used to convert it to number
+    const price = +priceEle.value;
+    // now I want to create a new course with the above title and price
+    const createdCourse = new Course(title, price);
+    console.log(validate(createdCourse), 'validation');
+    if (!validate(createdCourse)) {
+        alert('Invalid input');
+    }
+});

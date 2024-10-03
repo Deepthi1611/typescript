@@ -187,4 +187,85 @@ const button = document.querySelector('button')
 // button?.addEventListener('click', print.showMessage.bind(print))
 button?.addEventListener('click', print.showMessage)
 
+
+interface ValidatorConfig {
+    [property: string] : {
+        [validatableProp: string]: string[] // ['required', 'positive']
+    }
+}
+
+const registeredValidators:ValidatorConfig = {}
+
+function Required(target: any, name: string) {
+    registeredValidators[target.constructor.name] = {
+        ...registeredValidators[target.constructor.name],
+        // appending required to the existing array
+        [name]: [...(registeredValidators[target.constructor.name]?.[name] ?? []), 'required']
+    }
+}
+
+function PositiveNumber(target: any, name: string) {
+    registeredValidators[target.constructor.name] = {
+        ...registeredValidators[target.constructor.name],
+        // appending positive to the existing array
+        [name]: [...(registeredValidators[target.constructor.name]?.[name] ?? []), 'positive']
+    }
+}
+
+function validate(obj: any) {
+    // we need to validate all of the registered validators here
+    console.log(registeredValidators, 'registered validators')
+    const objValidatorConfig = registeredValidators[obj.constructor.name];
+    console.log(objValidatorConfig, 'object validator config')
+    if(!objValidatorConfig) {
+        return true
+    }
+    let isValid = true
+    for(const prop in objValidatorConfig) {
+        // prop is the key of each object
+        console.log(prop, 'prop')
+        for(const validator of objValidatorConfig[prop]) {
+            console.log(validator, 'validator')
+            switch(validator) {
+                case 'required':
+                    isValid =  isValid && !!obj[prop];
+                    break
+                case 'positive':
+                    isValid =  isValid && obj[prop] > 0;
+                    break
+            }
+        }
+    }
+    return isValid
+}
+
+class Course {
+    @Required
+    title: string 
+    @PositiveNumber
+    price: number
+
+    constructor(title: string, price: number) {
+        this.title = title,
+        this.price = price
+    }
+}
+
+const courseForm = document.querySelector('form')!;
+courseForm.addEventListener('submit', event => {
+    event.preventDefault();
+    const titleEle = document.getElementById('title') as HTMLInputElement
+    const priceEle = document.getElementById('price') as HTMLInputElement
+
+    const title = titleEle.value
+    // + is used to convert it to number
+    const price = +priceEle.value
+    // now I want to create a new course with the above title and price
+    const createdCourse = new Course(title, price)
+    console.log(validate(createdCourse), 'validation')
+    if(!validate(createdCourse)) {
+        alert('Invalid input')
+    }
+})
+
 export {}
